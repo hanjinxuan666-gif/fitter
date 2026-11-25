@@ -475,7 +475,8 @@ class Fitter:
                 for dist in self.distributions
             )
 
-        # Process results and populate dictionaries
+        # Replace previous fits only after the current batch has completed.
+        self._init()
         for distribution, values in results:
             if values is not None:
                 (

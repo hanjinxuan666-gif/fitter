@@ -6,6 +6,16 @@ def test_dist():
     assert len(get_distributions()) > 40
 
 
+def test_refit_clears_results_from_previous_distributions():
+    fitter = Fitter([1, 2, 3, 4, 5], distributions=["norm", "uniform"])
+    fitter.fit(max_workers=1)
+    assert set(fitter.fitted_param) == {"norm", "uniform"}
+
+    fitter.distributions = ["norm"]
+    fitter.fit(max_workers=1)
+    assert set(fitter.fitted_param) == set(fitter.fitted_pdf) == set(fitter.df_errors.index) == {"norm"}
+
+
 def test_fitter():
     f = Fitter([1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3], distributions=["gamma"], xmin=0, xmax=4)
     try:
